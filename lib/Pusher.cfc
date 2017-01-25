@@ -179,66 +179,19 @@ component
 		);
 
 		// Build the HTTP request.
-		var httpRequest = new HTTP(
-			method = "post",
-			url = ("http://api.pusherapp.com" & resourceUri),
-			charset = "utf-8"
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "name",
-			value = eventType
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "body_md5",
-			value = md5Body
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "socket_id",
-			value = socketID
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "auth_key",
-			value = variables.appKey
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "auth_timestamp",
-			value = epochTimeInSeconds
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "auth_signature",
-			value = signature
-		);
-
-		httpRequest.addParam(
-			type = "url",
-			name = "auth_version",
-			value = apiVersion
-		);
-
-		// The message must be passed through as a JSON body.
-		httpRequest.addParam(
-			type = "header",
-			name = "content-type",
-			value = "application/json"
-		);
-
-		httpRequest.addParam(
-			type = "body",
-			value = serializedMessage
-		);
-
+		cfhttp( url="http://api.pusherapp.com" & resourceUri, charset="utf-8", method="post", result="response" ) {
+		    cfhttpparam( type="url", name="name", value=eventType );
+		    cfhttpparam( type="url", name="body_md5", value=md5Body );
+		    cfhttpparam( type="url", name="socket_id", value=socketID );
+		    cfhttpparam( type="url", name="auth_key", value=variables.appKey );
+		    cfhttpparam( type="url", name="auth_timestamp", value=epochTimeInSeconds );
+		    cfhttpparam( type="url", name="auth_signature", value=signature );
+		    cfhttpparam( type="url", name="auth_version", value=eventType );
+		    cfhttpparam( type="url", name="name", value=apiVersion );
+		    cfhttpparam( type="header", name="Content-Type", value="application/json" );
+		    cfhttpparam( type="body", value=serializedMessage );
+		}
+		
 		// Send the HTTP request and get the result.
 		var response = httpRequest
 			 .send()
